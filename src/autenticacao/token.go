@@ -17,7 +17,7 @@ import (
 func CriarToken(usuarioID uint64) (string, error) {
 	permissoes := jwt.MapClaims{}
 	permissoes["authorized"] = true
-	permissoes["exp"] = time.Now().Add(time.Hour * 6).Unix() //exp se refere a expiração, logo tempo de duraçao do token
+	permissoes["exp"] = time.Now().Add(time.Hour * 16).Unix() //exp se refere a expiração, logo tempo de duraçao do token
 	permissoes["usuarioId"] = usuarioID
 	//até aqui foram as permissoes do nosso token, agora temos que gerar ele e depois assinar ele digitalmente
 	//para tal vamos usar a chave secret
