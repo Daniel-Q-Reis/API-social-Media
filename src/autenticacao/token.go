@@ -42,22 +42,31 @@ func ValidarToken(r *http.Request) error {
 
 // ExtrairUsuarioID retorna o usuarioId que está salvo no token
 func ExtrairUsuarioID(r *http.Request) (uint64, error) {
-	tokenString := extrairToken(r)
+	tokenString := extrairToken(r) // Chama uma função auxiliar para extrair o token JWT do cabeçalho da requisição HTTP
+	// Faz o parsing (análise/validação) do token JWT
+	// A função 'retronarChaveDeVerificacao' será usada para verificar a assinatura do token
 	token, erro := jwt.Parse(tokenString, retronarChaveDeVerificacao) //jwt = jason web token
 	if erro != nil {
 		return 0, erro
 	}
 
+	// Se o token foi validado corretamente e seus dados (claims) podem ser acessados,
+	// convertemos as claims para o tipo jwt.MapClaims (um map[string]interface{})
 	if permissoes, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		// Aqui acessamos a claim "usuarioId" que está dentro do token
+		// Como os claims do JWT são do tipo genérico interface{}, o valor vem como float64
+		// Então usamos fmt.Sprintf para transformar esse float64 em uma string sem casas decimais (%.0f)
+		// Depois usamos strconv.ParseUint para converter essa string para uint64
 		usuarioID, erro := strconv.ParseUint(fmt.Sprintf("%.0f", permissoes["usuarioId"]), 10, 64) //tivemos que transformar em string
 		if erro != nil {
 			return 0, erro
 		}
-
+		// Se ocorreu tudo bem até aqui retornamos o usuarioID extraido do token
 		return usuarioID, nil
 
 	}
 
+	// Se o token não é válido ou não conseguimos acessar as claims corretamente
 	return 0, errors.New("token inválido")
 }
 

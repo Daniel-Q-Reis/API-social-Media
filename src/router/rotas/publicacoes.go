@@ -9,7 +9,7 @@ var rotasPublicacoes = []Rota{
 	{
 		URI:                "/publicacoes",
 		Metodo:             http.MethodPost,
-		Funcao:             controllers.CriarPublicacoes,
+		Funcao:             controllers.CriarPublicacao,
 		RequerAutenticacao: true,
 	},
 	{
