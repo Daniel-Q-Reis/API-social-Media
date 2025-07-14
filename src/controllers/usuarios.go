@@ -56,7 +56,6 @@ func CriarUsuario(w http.ResponseWriter, r *http.Request) {
 
 	respostas.JSON(w, http.StatusCreated, usuario) //respostas.Erro pra quando o erro acontecer
 	//respostas.JSON pra quando tudo der certo
-
 }
 
 // BuscarUsuarios busca todos os usuários salvos no banco
@@ -164,7 +163,6 @@ func AtualizarUsuario(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write([]byte("Usuário atualizado com sucesso!\n"))
 	respostas.JSON(w, http.StatusNoContent, nil)
 }
 
@@ -174,7 +172,7 @@ func DeletarUsuario(w http.ResponseWriter, r *http.Request) {
 
 	usuarioID, erro := strconv.ParseUint(parametros["usuarioId"], 10, 64)
 	if erro != nil {
-		http.Error(w, "Erro ao converter parametro para inteiro", http.StatusBadRequest)
+		respostas.Erro(w, http.StatusBadRequest, erro)
 		return
 	}
 
@@ -202,9 +200,7 @@ func DeletarUsuario(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write([]byte("Usuário deletado!"))
 	respostas.JSON(w, http.StatusNoContent, nil)
-
 }
 
 // SeguirUsuario permite que um usuário siga outro
@@ -223,13 +219,13 @@ func SeguirUsuario(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if seguidorID == usuarioID {
-		respostas.Erro(w, http.StatusForbidden, errors.New("Não é possivel seguir você mesmo"))
+		respostas.Erro(w, http.StatusForbidden, errors.New("não é possivel seguir você mesmo"))
 		return
 	}
 
 	db, erro := banco.Conectar()
 	if erro != nil {
-		http.Error(w, "Erro ao conectar com banco de dados", http.StatusInternalServerError)
+		respostas.Erro(w, http.StatusInternalServerError, erro)
 		return
 	}
 	defer db.Close()
@@ -241,7 +237,6 @@ func SeguirUsuario(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respostas.JSON(w, http.StatusNoContent, nil)
-
 }
 
 // PararDeSeguirUsuario
@@ -266,7 +261,7 @@ func PararDeSeguirUsuario(w http.ResponseWriter, r *http.Request) {
 
 	db, erro := banco.Conectar()
 	if erro != nil {
-		http.Error(w, "Erro ao conectar com banco de dados", http.StatusInternalServerError)
+		respostas.Erro(w, http.StatusInternalServerError, erro)
 		return
 	}
 	defer db.Close()
@@ -291,7 +286,7 @@ func BuscarSeguidores(w http.ResponseWriter, r *http.Request) {
 
 	db, erro := banco.Conectar()
 	if erro != nil {
-		http.Error(w, "Erro ao conectar com banco de dados", http.StatusInternalServerError)
+		respostas.Erro(w, http.StatusInternalServerError, erro)
 		return
 	}
 	defer db.Close()
@@ -317,7 +312,7 @@ func BuscarSeguindo(w http.ResponseWriter, r *http.Request) {
 
 	db, erro := banco.Conectar()
 	if erro != nil {
-		http.Error(w, "Erro ao conectar com banco de dados", http.StatusInternalServerError)
+		respostas.Erro(w, http.StatusInternalServerError, erro)
 		return
 	}
 	defer db.Close()
@@ -367,7 +362,7 @@ func AtualizarSenha(w http.ResponseWriter, r *http.Request) {
 
 	db, erro := banco.Conectar()
 	if erro != nil {
-		http.Error(w, "Erro ao conectar com banco de dados", http.StatusInternalServerError)
+		respostas.Erro(w, http.StatusInternalServerError, erro)
 		return
 	}
 	defer db.Close()
