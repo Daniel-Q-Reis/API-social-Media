@@ -54,7 +54,6 @@ func CriarUsuario(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write([]byte("Usuario Criado!\n"))
 	respostas.JSON(w, http.StatusCreated, usuario) //respostas.Erro pra quando o erro acontecer
 	//respostas.JSON pra quando tudo der certo
 
@@ -192,7 +191,7 @@ func DeletarUsuario(w http.ResponseWriter, r *http.Request) {
 
 	db, erro := banco.Conectar()
 	if erro != nil {
-		http.Error(w, "Erro ao conectar com banco de dados", http.StatusInternalServerError)
+		respostas.Erro(w, http.StatusInternalServerError, erro)
 		return
 	}
 	defer db.Close()
@@ -256,12 +255,12 @@ func PararDeSeguirUsuario(w http.ResponseWriter, r *http.Request) {
 	parametros := mux.Vars(r)
 	usuarioID, erro := strconv.ParseUint(parametros["usuarioId"], 10, 64)
 	if erro != nil {
-		respostas.Erro(w, http.StatusUnauthorized, erro)
+		respostas.Erro(w, http.StatusBadRequest, erro)
 		return
 	}
 
 	if seguidorID == usuarioID {
-		respostas.Erro(w, http.StatusForbidden, errors.New("Não é possivel parar de seguir você mesmo"))
+		respostas.Erro(w, http.StatusForbidden, errors.New("não é possivel parar de seguir você mesmo"))
 		return
 	}
 
@@ -279,8 +278,6 @@ func PararDeSeguirUsuario(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respostas.JSON(w, http.StatusNoContent, nil)
-	w.Write([]byte("Você parou de seguir esse usuário"))
-
 }
 
 // BuscarSeguidores traz todos os seguidores de um usuário
