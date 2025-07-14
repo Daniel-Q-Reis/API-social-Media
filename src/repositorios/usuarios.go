@@ -24,13 +24,13 @@ func (repositorio Usuarios) Criar(usuario modelos.Usuario) (uint64, error) {
 		"insert into usuarios (nome, nick, email, senha) values(?, ?, ?, ?)",
 	)
 	if erro != nil {
-		return 0, nil
+		return 0, erro
 	}
 	defer statement.Close()
 
 	resultado, erro := statement.Exec(usuario.Nome, usuario.Nick, usuario.Email, usuario.Senha) // usuario esta vindo do parametro criar
 	if erro != nil {
-		return 0, nil
+		return 0, erro
 	}
 
 	ultimoIDInserido, erro := resultado.LastInsertId() //esse cara aqui é um int64 entao no final teremos que converter

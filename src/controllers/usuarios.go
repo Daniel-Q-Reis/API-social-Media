@@ -9,7 +9,6 @@ import (
 	"api/src/seguranca"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"net/http"
 	"strconv"
@@ -127,7 +126,6 @@ func AtualizarUsuario(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(usuarioIDNoToken)
 	if usuarioID != usuarioIDNoToken {
 		respostas.Erro(w, http.StatusForbidden, errors.New("não é possivel atualizar um usuário que não seja o seu"))
 		return
