@@ -55,6 +55,12 @@ var rotasUsuarios = []Rota{
 		RequerAutenticacao: true,
 	},
 	{
+		URI:                "/usuarios/{usuarioId}/seguindo",
+		Metodo:             http.MethodGet,
+		Funcao:             controllers.BuscarSeguindo,
+		RequerAutenticacao: true,
+	},
+	{
 		URI:                "/usuarios/{usuarioId}/atualizar-senha",
 		Metodo:             http.MethodPost, //nao usar o metodo put aqui pois se passar os mesmos dados não haverá efeito, mas vai alterar o hash no bd, tirando o acesso do usuário
 		Funcao:             controllers.AtualizarSenha,
